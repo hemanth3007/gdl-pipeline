@@ -1,0 +1,37 @@
+pipeline {
+	agent any
+	tools {
+		gradle 'gradle'
+		jdk 'jdk'
+	}
+	stages {
+		stage('Checkout') {
+			steps {
+				git branch: 'main', url: 'https://github.com/hemanth3007/gdl-pipeline.git'
+			}
+		}
+		stage('Build') {
+			steps {
+				sh 'gradle build'
+			}
+		}
+		stage('Test') {
+			steps {
+				sh 'gradle test'
+			}
+		}
+		stage('Run Application') {
+			steps {
+				sh 'gradle run'
+			}
+		}
+	}
+	post {
+		success {
+			echo 'Build successful and deployed'
+		}
+		failure {
+			echo 'Build failure'
+		}
+	}
+}
